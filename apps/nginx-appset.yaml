@@ -1,0 +1,44 @@
+# ApplicationSet to deploy NGINX in both dev and prod.
+# This will generate 2 Applications: nginx-dev and nginx-prod.
+# Namespaces follow the suffix policy: web-dev / web-prod.
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: nginx
+  namespace: argocd
+spec:
+  generators:
+    - list:
+        elements:
+          - name: nginx-dev
+            project: dev
+            ns: web-dev
+            repo: https://github.com/jvizueta/k8s-nginx.git
+            rev: main              # Dev tracks main
+            prune: "true"
+            selfHeal: "true"
+          - name: nginx-prod
+            project: prod
+            ns: web-prod
+            repo: https://github.com/jvizueta/k8s-nginx.git
+            rev: v1.0.0            # Pin prod to a tag or SHA
+            prune: "false"         # Conservative in prod (enable later if desired)
+            selfHeal: "true"
+  template:
+    metadata:
+      name: '{{name}}'
+    spec:
+      project: '{{project}}'
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: '{{ns}}'
+      source:
+        repoURL: '{{repo}}'
+        targetRevision: '{{rev}}'
+        path: .
+        directory:
+          recurse: true
+      syncPolicy:
+        automated:
+          prune: {{prune}}
+          selfHeal: {{selfHeal}}

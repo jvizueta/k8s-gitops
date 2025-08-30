@@ -1,0 +1,50 @@
+# ArgoCD Specific
+/apps/*/secrets.yaml
+/apps/*/secrets.yml
+/apps/*/secret.yaml
+/apps/*/secret.yml
+**/secrets*.yaml
+**/secrets*.yml
+**/secret*.yaml
+**/secret*.yml
+**/kustomization.yaml
+**/patches/
+argocd-notifications.yaml
+argocd-notifications-cm.yaml
+
+# Kubernetes
+kubeconfig*
+*.tmpkubeconfig
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.log
+*.pid
+
+# Local development
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Kustomize
+/kustomize-build/

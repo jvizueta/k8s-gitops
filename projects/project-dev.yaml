@@ -1,0 +1,23 @@
+# Argo CD Project for "dev" environments
+# Allows deploying apps from your repos into any cluster,
+# but only to namespaces that end with -dev (suffix).
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: dev
+  namespace: argocd
+spec:
+  description: Apps allowed to deploy into namespaces with -dev suffix
+  sourceRepos:
+    - https://github.com/jvizueta/k8s-*   # Only repos under your GitHub starting with k8s-
+  destinations:
+    - server: '*'        # Any cluster registered in Argo CD
+      namespace: "*-dev" # Must end with -dev
+  orphanedResources:
+    warn: true           # Warn if resources are unmanaged
+  clusterResourceWhitelist:
+    - group: "*"         # Allow all cluster-scoped resources (tighten later if needed)
+      kind: "*"
+  namespaceResourceBlacklist:
+    - group: ""          # Prevent dev apps from creating ResourceQuotas
+      kind: ResourceQuota
