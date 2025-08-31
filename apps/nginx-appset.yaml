@@ -7,6 +7,8 @@ metadata:
   name: nginx
   namespace: argocd
 spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"] 
   generators:
     - list:
         elements:
@@ -25,12 +27,10 @@ spec:
             prune: false         # Conservative in prod (enable later if desired)
             selfHeal: true
   template:
-    goTemplate: true
-    goTemplateOptions: ["missingkey=error"] 
     metadata:
       name: '{{ .name }}'
     spec:
-      project: '{{ .project}}'
+      project: '{{ .project }}'
       destination:
         server: https://kubernetes.default.svc
         namespace: '{{ .ns }}'
@@ -40,7 +40,17 @@ spec:
         path: .
         directory:
           recurse: true
+  templatePatch: | 
+    spec:
       syncPolicy:
         automated:
-          prune: {{ .prune }} 
-          selfHeal: {{ .selfHeal }}
+    {{- if .prune }}
+        prune: true
+    {{- else }}
+        prune: false
+    {{- end }}
+    {{- if .selfHeal }} 
+        selfHeal: true
+    {{- else }}
+        selfHeal: false
+    {{- end }}
