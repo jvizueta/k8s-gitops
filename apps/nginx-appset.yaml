@@ -12,15 +12,15 @@ spec:
         elements:
           - name: nginx-dev
             project: dev
-            ns: web-dev
-            repo: https://github.com/jvizueta/k8s-nginx.git
+            ns: nginx-dev
+            repo: git@github.com:jvizueta/k8s-app-nginx.git
             rev: main              # Dev tracks main
             prune: "true"
             selfHeal: "true"
           - name: nginx-prod
             project: prod
-            ns: web-prod
-            repo: https://github.com/jvizueta/k8s-nginx.git
+            ns: nginx-prod
+            repo: git@github.com:jvizueta/k8s-app-nginx.git
             rev: v1.0.0            # Pin prod to a tag or SHA
             prune: "false"         # Conservative in prod (enable later if desired)
             selfHeal: "true"

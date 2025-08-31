@@ -19,3 +19,29 @@ Projects are configured to allow deployments **only to namespaces that end with*
    ```bash
    kubectl create ns argocd
    kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+
+
+sync
+```
+argocd login argocd.lan --username admin --password $ARGOCD_PASSWORD --grpc-web --insecure
+argocd repo add git@github.com:jvizueta/k8s-cluster-01-apps-default.git --ssh-private-key-path ~/.ssh/id_rsa
+```
+
+
+Criar o Secret com a chave privada
+Arquivo repo-creds-github.yaml (exemplo global para todos os repos de GitHub):
+```
+k apply -f repo-creds-github.yaml -n argocd
+```
+
+Atualizar known_hosts (senão pode dar host key verification failed)
+```
+ssh-keyscan github.com >> /tmp/ssh_known_hosts
+ssh-keyscan -p 443 ssh.github.com >> /tmp/ssh_known_hosts
+kubectl -n argocd create configmap argocd-ssh-known-hosts-cm --from-file=ssh_known_hosts=/tmp/ssh_known_hosts --dry-run=client -o yaml | kubectl apply -f -
+```
+
+Aplicar root-app.yaml
+```
+kubectl -n argocd apply -f root-app.yaml
+```
