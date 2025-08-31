@@ -1,4 +1,44 @@
-# ArgoCD Specific
+# .gitignore for Kubernetes and ArgoCD Projects
+# This file specifies intentionally untracked files to ignore when using Git
+
+# ========================
+# SECURITY SENSITIVE FILES
+# ========================
+
+# SSH Keys and Private Key Files - NEVER COMMIT THESE!
+id_*
+*.pem
+*.key
+*.priv
+*-key
+*_rsa
+*_dsa
+*_ecdsa
+*_ed25519
+
+# Kubernetes configuration files
+kubeconfig*
+*.tmpkubeconfig
+config
+talosconfig           # Talos cluster configuration file
+alternative-kubeconfig # Alternative kubeconfig file
+
+# Certificate files (should be managed separately)
+*.crt
+*.csr
+
+# ========================
+# KUBERNETES & ARGOCD FILES
+# ========================
+
+# Sensitive Kubernetes manifests that should not be committed
+*-secret.yaml
+*-secret.yml
+*-sealedsecret.yaml
+*-sealedsecret.yml
+*-token-*
+
+# ArgoCD Specific sensitive files
 /apps/*/secrets.yaml
 /apps/*/secrets.yml
 /apps/*/secret.yaml
@@ -7,44 +47,129 @@
 **/secrets*.yml
 **/secret*.yaml
 **/secret*.yml
-**/kustomization.yaml
-**/patches/
 argocd-notifications.yaml
 argocd-notifications-cm.yaml
 
-# Kubernetes
-kubeconfig*
-*.tmpkubeconfig
+# Kustomize files
+**/kustomization.yaml
+**/patches/
+/kustomize-build/
+kustomize-build/
 
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
+# ========================
+# DEVELOPMENT & TEMPORARY FILES
+# ========================
 
-# OS
-.DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
-Thumbs.db
+# Local development files
+.local-*
+.dev-*
+override-*
 
-# Temporary files
-tmp/
-temp/
-*.tmp
-*.log
-*.pid
-
-# Local development
+# Environment files (should use examples instead)
 .env
 .env.local
+.env.production
 .env.development.local
 .env.test.local
 .env.production.local
 
-# Kustomize
-/kustomize-build/
+# Temporary directories and files
+tmp/
+temp/
+*.tmp
+*.temp
+*.pid
+
+# Log files
+*.log
+logs/
+
+# Backup files
+*.bak
+*.backup
+
+# ========================
+# IDE AND EDITOR FILES
+# ========================
+
+# VS Code
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+
+# Vim
+*.swp
+*.swo
+*~
+
+# ========================
+# OS GENERATED FILES
+# ========================
+
+# macOS
+.DS_Store
+.DS_Store?
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Linux
+*~
+
+# ========================
+# TOOL-SPECIFIC FILES
+# ========================
+
+# Helm specific
+*.tgz
+Chart.lock
+
+# Terraform (if used alongside Kubernetes)
+.terraform/
+*.tfstate
+*.tfstate.backup
+*.tfvars
+
+# Skaffold (if used)
+.skaffold/
+
+# Tilt (if used)
+.tilt/
+
+# ========================
+# DOCUMENTATION AND BUILD
+# ========================
+
+# Documentation build outputs
+site/
+_build/
+
+# Keep this file but ignore everything in .gitignore.d/ if you use includes
+.gitignore.d/
+
+# ========================
+# SECURITY NOTES
+# ========================
+
+# Note: Always be cautious about ignoring configuration files
+# that might be necessary for development but contain sensitive data.
+# Consider using tools like git-secret, SOPS, or Sealed Secrets for sensitive data.
+
+## Security Warning:
+# Files like SSH keys, kubeconfig files, and talosconfig contain sensitive
+# credentials that grant access to your infrastructure. Never commit these to version control.
+# Use secret management tools like HashiCorp Vault, Kubernetes Secrets, or SOPS for sensitive data.

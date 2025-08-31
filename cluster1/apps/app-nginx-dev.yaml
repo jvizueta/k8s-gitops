@@ -6,9 +6,9 @@ metadata:
 spec:
   project: dev            # o "default" si no tienes AppProject "dev"
   source:
-    repoURL: git@github.com:jvizueta/k8s-app-nginx.git
+    repoURL: git@github.com:jvizueta/k8s-apps.git
     targetRevision: main
-    path: .
+    path: nginx
     directory:
       recurse: true
   destination:
