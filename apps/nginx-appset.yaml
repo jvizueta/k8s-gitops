@@ -25,20 +25,22 @@ spec:
             prune: false         # Conservative in prod (enable later if desired)
             selfHeal: true
   template:
+    goTemplate: true
+    goTemplateOptions: ["missingkey=error"] 
     metadata:
-      name: '{{name}}'
+      name: '{{ .name }}'
     spec:
-      project: '{{project}}'
+      project: '{{ .project}}'
       destination:
         server: https://kubernetes.default.svc
-        namespace: '{{ns}}'
+        namespace: '{{ .ns }}'
       source:
-        repoURL: '{{repo}}'
-        targetRevision: '{{rev}}'
+        repoURL: '{{ .repo }}'
+        targetRevision: '{{ .rev }}'
         path: .
         directory:
           recurse: true
       syncPolicy:
         automated:
-          prune: true
-          selfHeal: true
+          prune: {{ .prune }} 
+          selfHeal: {{ .selfHeal }}
