@@ -15,11 +15,11 @@ Projects are configured to allow deployments **only to namespaces that end with*
 
 ## Bootstrap Instructions
 
-1. **Install Argo CD** (if not already):
+**Install Argo CD** (if not already):
    ```bash
    kubectl create ns argocd
    kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
-
+   ```
 
 sync
 ```
@@ -37,9 +37,10 @@ k apply -f repo-creds-github.yaml -n argocd
 Atualizar known_hosts (senão pode dar host key verification failed)
 ```
 ssh-keyscan github.com >> /tmp/ssh_known_hosts
-ssh-keyscan -p 443 ssh.github.com >> /tmp/ssh_known_hosts
 kubectl -n argocd create configmap argocd-ssh-known-hosts-cm --from-file=ssh_known_hosts=/tmp/ssh_known_hosts --dry-run=client -o yaml | kubectl apply -f -
 ```
+
+ssh-keyscan -p 443 ssh.github.com >> /tmp/ssh_known_hosts
 
 Aplicar root-app.yaml
 ```
