@@ -15,15 +15,15 @@ spec:
             ns: nginx-dev
             repo: git@github.com:jvizueta/k8s-app-nginx.git
             rev: main              # Dev tracks main
-            prune: true
-            selfHeal: true
+            prune: 'true'
+            selfHeal: 'true'
           - name: nginx-prod
             project: prod
             ns: nginx-prod
             repo: git@github.com:jvizueta/k8s-app-nginx.git
             rev: v1.0.0            # Pin prod to a tag or SHA
-            prune: false         # Conservative in prod (enable later if desired)
-            selfHeal: true
+            prune: 'false'         # Conservative in prod (enable later if desired)
+            selfHeal: 'true'
   template:
     metadata:
       name: '{{name}}'
@@ -40,5 +40,5 @@ spec:
           recurse: true
       syncPolicy:
         automated:
-          prune: {{prune}}
-          selfHeal: {{selfHeal}}
+          prune: {{ if eq .prune "true" }}true{{ else }}false{{ end }}
+          selfHeal: {{ if eq .selfHeal "true" }}true{{ else }}false{{ end }}
