@@ -40,5 +40,5 @@ spec:
           recurse: true
       syncPolicy:
         automated:
-          prune: {{ if eq .prune "true" }}true{{ else }}false{{ end }}
-          selfHeal: {{ if eq .selfHeal "true" }}true{{ else }}false{{ end }}
+          prune: '{{prune}}'
+          selfHeal: '{{selfHeal}}'
