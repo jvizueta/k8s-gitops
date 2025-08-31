@@ -10,7 +10,7 @@ spec:
   source:
     repoURL: git@github.com:jvizueta/k8s-clusters.git  # This repo
     targetRevision: main   # Branch to track
-    path: .                # Look at the whole repo
+    path: cluster1         # Look at the whole repo
     directory:
       recurse: true        # Pick up all subfolders (projects/, apps/, etc.)
   destination:
