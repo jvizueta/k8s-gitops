@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: wsagentes-dev
+  labels:
+    env: dev
+    app: wsagentes
+  annotations:
+    argocd.argoproj.io/sync-wave: "-1"  # ensure this applies before apps
