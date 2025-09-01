@@ -34,7 +34,7 @@ Arquivo repo-creds-github.yaml (exemplo global para todos os repos de GitHub):
 k apply -f repo-creds-github.yaml -n argocd
 ```
 
-Atualizar known_hosts (senão pode dar host key verification failed)
+Update known_hosts (senão pode dar host key verification failed)
 ```
 ssh-keyscan github.com >> /tmp/ssh_known_hosts
 kubectl -n argocd create configmap argocd-ssh-known-hosts-cm --from-file=ssh_known_hosts=/tmp/ssh_known_hosts --dry-run=client -o yaml | kubectl apply -f -
@@ -42,7 +42,7 @@ kubectl -n argocd create configmap argocd-ssh-known-hosts-cm --from-file=ssh_kno
 
 ssh-keyscan -p 443 ssh.github.com >> /tmp/ssh_known_hosts
 
-Aplicar root-app.yaml
+Apply root-app.yaml
 ```
 kubectl -n argocd apply -f root-app.yaml
 ```
