@@ -8,7 +8,7 @@ spec:
   source:
     repoURL: git@github.com:jvizueta/k8s-apps-private.git
     targetRevision: main
-    path: n8n-k8s/overlays/prod
+    path: n8n/overlays/prod
   destination:
     server: https://kubernetes.default.svc
     namespace: n8n-prod
