@@ -17,11 +17,5 @@ spec:
       prune: true
       selfHeal: true
     syncOptions:
-      #- CreateNamespace=true       # cria o namespace se não existir
+      - CreateNamespace=true       # cria o namespace se não existir
       - ApplyOutOfSyncOnly=true    # aplica somente o que está fora de sync
-  retry:
-    limit: 3
-    backoff:
-      duration: 5s
-      factor: 2
-      maxDuration: 3m
