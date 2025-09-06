@@ -1,0 +1,27 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: n8n-prod
+  namespace: argocd        # namespace onde o Argo CD está instalado
+spec:
+  project: prod
+  source:
+    repoURL: git@github.com:jvizueta/k8s-apps-private.git
+    targetRevision: main
+    path: n8n-k8s/overlays/prod
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: n8n-prod
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      #- CreateNamespace=true       # cria o namespace se não existir
+      - ApplyOutOfSyncOnly=true    # aplica somente o que está fora de sync
+  retry:
+    limit: 3
+    backoff:
+      duration: 5s
+      factor: 2
+      maxDuration: 3m
