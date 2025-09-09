@@ -8,12 +8,22 @@ spec:
   destination:
     server: https://kubernetes.default.svc
     namespace: liqprog-dev
-  source:
-    repoURL: git@github.com:jvizueta/k8s-apps-private.git
-    targetRevision: main
-    path: liqprog/mysql/overlays/dev
-    kustomize:
-      buildOptions: --enable-helm
+  sources:
+    # Source 1: Kustomize overlay (applies Secret first)
+    - repoURL: git@github.com:jvizueta/k8s-apps-private.git
+      targetRevision: main
+      path: liqprog/mysql/overlays/dev
+      ref: values     # <-- alias so Helm can reference files from here
+      kustomize: {}
+
+    # Source 2: Helm (Bitnami MySQL) consuming that values.yaml
+    - repoURL: https://charts.bitnami.com/bitnami
+      chart: mysql
+      targetRevision: 14.0.3
+      helm:
+        releaseName: liqprog-mysql
+        valueFiles:
+          - $values/liqprog/mysql/overlays/dev/values.yaml
   syncPolicy:
     automated:
       prune: true
