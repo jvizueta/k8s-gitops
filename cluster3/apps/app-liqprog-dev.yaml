@@ -1,4 +1,3 @@
-# k8s-clusters/cluster3/apps/liqprog.yaml
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
@@ -9,12 +8,12 @@ spec:
   destination:
     server: https://kubernetes.default.svc
     namespace: liqprog-dev
-  sources:
-    - repoURL: git@github.com:jvizueta/k8s-apps-private.git
-      targetRevision: main
-      path: liqprog/mysql/overlays/dev
-      kustomize:
-        buildOptions: --enable-helm
+  source:
+    repoURL: git@github.com:jvizueta/k8s-apps-private.git
+    targetRevision: main
+    path: liqprog/mysql/overlays/dev
+    kustomize:
+      buildOptions: --enable-helm
   syncPolicy:
     automated:
       prune: true
