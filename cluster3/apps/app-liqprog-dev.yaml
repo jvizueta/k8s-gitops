@@ -1,0 +1,21 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: liqprog
+  namespace: argocd
+spec:
+  project: dev
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: liqprog-dev
+  sources:
+    - repoURL: git@github.com:jvizueta/k8s-apps-private.git
+      targetRevision: main
+      path: liqprog/mysql/overlays/dev
+      kustomize: {}   # overlay usa helmCharts no base; sem namespace nos objetos
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
