@@ -10,7 +10,7 @@ spec:
     server: https://kubernetes.default.svc
     namespace: liqprog-dev
   sources:
-    - repoURL: git@github.com:YOURORG/k8s-apps-private.git
+    - repoURL: git@github.com:jvizueta/k8s-apps-private.git
       targetRevision: main
       path: liqprog/mysql/overlays/dev
       kustomize:
