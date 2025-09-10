@@ -1,0 +1,15 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: infra
+  namespace: argocd
+spec:
+  description: Infra (ARC, etc.)
+  destinations:
+    - server: '*'
+      namespace: actions-runner-system
+  sourceRepos:
+    - https://actions-runner-controller.github.io/actions-runner-controller
+  clusterResourceWhitelist:
+    - group: '*'
+      kind: '*'

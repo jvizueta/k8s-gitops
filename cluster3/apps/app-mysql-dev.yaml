@@ -1,18 +1,18 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: liqprog-dev
+  name: mysql-dev
   namespace: argocd
 spec:
   project: dev
   destination:
     server: https://kubernetes.default.svc
-    namespace: liqprog-dev
+    namespace: mysql-dev
   sources:
     # 1) Overlay Kustomize: aplica o Secret primeiro (wave -1)
     - repoURL: git@github.com:jvizueta/k8s-apps-private.git
       targetRevision: main
-      path: liqprog/mysql/overlays/dev
+      path: mysql/overlays/dev
       ref: values
       kustomize: {}   # sem buildOptions aqui
 
@@ -21,18 +21,17 @@ spec:
       chart: mysql
       targetRevision: 14.0.3
       helm:
-        releaseName: liqprog-mysql
+        releaseName: mysql
         valueFiles:
-          - $values/liqprog/mysql/overlays/dev/values.yaml
+          - $values/mysql/overlays/dev/values.yaml
 
     - repoURL: https://kubernetes.github.io/ingress-nginx
       chart: ingress-nginx
       targetRevision: 4.11.2
       helm:
-        releaseName: liqprog-ingress
+        releaseName: mysql-ingress
         valueFiles:
-          - $values/liqprog/mysql/overlays/dev/ingress-nginx-values.yaml
-
+          - $values/mysql/overlays/dev/ingress-nginx-values.yaml
   syncPolicy:
     automated:
       prune: true
