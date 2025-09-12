@@ -1,0 +1,29 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: actions-runner-controller
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "-10"  
+spec:
+  project: infra
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: actions-runner-system-infra
+  source:
+    repoURL: https://actions-runner-controller.github.io/actions-runner-controller
+    chart: actions-runner-controller
+    # targetRevision: 0.9.3   # opcional: fíjalo si quieres
+    helm:
+      values: |
+        authSecret:
+          create: false
+          name: controller-manager
+        githubWebhookServer:
+          enabled: false
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

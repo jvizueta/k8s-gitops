@@ -1,15 +1,25 @@
+# Argo CD Project for "infra" environments
+# Allows deploying apps from your repos into any cluster,
+# but only to namespaces that end with -infra (suffix).
 apiVersion: argoproj.io/v1alpha1
 kind: AppProject
 metadata:
   name: infra
   namespace: argocd
 spec:
-  description: Infra (ARC, etc.)
-  destinations:
-    - server: '*'
-      namespace: actions-runner-system
+  description: Apps allowed to deploy into namespaces with -dev suffix
   sourceRepos:
-    - https://actions-runner-controller.github.io/actions-runner-controller
+    - git@github.com:jvizueta/k8s-apps*   # Only repos under your GitHub starting with k8s-app-
+    - https://charts.bitnami.com/bitnami
+    - https://kubernetes.github.io/ingress-nginx
+  destinations:
+    - server: '*'        # Any cluster registered in Argo CD
+      namespace: "*-infra" # Must end with -dev
+  orphanedResources:
+    warn: true           # Warn if resources are unmanaged
   clusterResourceWhitelist:
-    - group: '*'
-      kind: '*'
+    - group: "*"         # Allow all cluster-scoped resources (tighten later if needed)
+      kind: "*"
+  namespaceResourceBlacklist:
+    - group: ""          # Prevent infra apps from creating ResourceQuotas
+      kind: ResourceQuota
