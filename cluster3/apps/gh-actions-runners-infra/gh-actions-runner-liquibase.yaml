@@ -1,20 +1,22 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: actions-runner-controller-secrets
+  name: gh-actions-runner-liquibase
   namespace: argocd
   annotations:
-    argocd.argoproj.io/sync-wave: "-20"
+    argocd.argoproj.io/sync-wave: "-5"
 spec:
   project: infra
   destination:
     server: https://kubernetes.default.svc
-    namespace: actions-runner-system-infra
+    namespace: gh-actions-runners-infra
   source:
     repoURL: git@github.com:jvizueta/k8s-apps-private.git
     targetRevision: main
-    path: gh-arc-secrets/base  # aquí vive tu SealedSecret    
+    path: gh-actions-runners/base
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
+    syncOptions:
+       - CreateNamespace=true
