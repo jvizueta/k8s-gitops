@@ -27,7 +27,7 @@ spec:
         # (Opcional) Mantener runners “calientes” unos minutos:
         # runnerIdleTimeSeconds: 300
         controllerServiceAccount:
-          name: gh-actions-rs-controller-controller-manager
+          name: gh-actions-rss-controller-gha-rs-controller
           namespace: gh-actions-runner-system-infra
   syncPolicy:
     automated:
