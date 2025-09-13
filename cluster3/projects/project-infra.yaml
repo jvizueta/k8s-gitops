@@ -13,6 +13,7 @@ spec:
     - https://charts.bitnami.com/bitnami
     - https://kubernetes.github.io/ingress-nginx
     - https://actions-runner-controller.github.io/actions-runner-controller
+    - ghcr.io/actions/actions-runner-controller-charts
   destinations:
     - server: '*'        # Any cluster registered in Argo CD
       namespace: "*-infra" # Must end with -infra
