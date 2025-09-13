@@ -3,6 +3,8 @@ kind: Application
 metadata:
   name: gh-actions-rss-liq
   namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-options: ServerSideApply=true
 spec:
   project: infra
   destination:
@@ -30,3 +32,5 @@ spec:
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
+      - ServerSideApply=true
+      
