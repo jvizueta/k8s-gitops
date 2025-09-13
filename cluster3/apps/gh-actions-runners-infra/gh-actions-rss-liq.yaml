@@ -1,0 +1,32 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: gh-actions-rss-liq
+  namespace: argocd
+spec:
+  project: infra
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: gh-actions-runners-infra
+  source:
+    repoURL: ghcr.io/actions/actions-runner-controller-charts
+    chart: gha-runner-scale-set
+    targetRevision: "0.12.1"
+    helm:
+      values: |
+        githubConfigUrl: https://github.com/jvizueta/liq-r2-demo
+        githubConfigSecret: gh-actions-app-credentials  # <- Secret con credenciales (paso 3)
+        runnerScaleSetName: liq-rs                # <- Este nombre lo usarás en "runs-on"
+        minRunners: 0
+        maxRunners: 3
+        # Si necesitas Docker-in-Docker para builds:
+        containerMode:
+          type: "dind"
+        # (Opcional) Mantener runners “calientes” unos minutos:
+        # runnerIdleTimeSeconds: 300
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
