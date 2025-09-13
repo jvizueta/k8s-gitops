@@ -26,6 +26,9 @@ spec:
           type: "dind"
         # (Opcional) Mantener runners “calientes” unos minutos:
         # runnerIdleTimeSeconds: 300
+        controllerServiceAccount:
+          name: gh-actions-rs-controller-controller-manager
+          namespace: gh-actions-runner-system-infra
   syncPolicy:
     automated:
       prune: true
