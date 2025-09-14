@@ -1,0 +1,32 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: gh-arc-rss
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "0"    # apply after secrets  
+spec:
+  project: infra
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: gh-actions-runners-infra
+  source:
+    repoURL: ghcr.io/actions/actions-runner-controller-charts
+    chart: gha-runner-scale-set
+    targetRevision: "0.12.1"
+    helm:
+      values: |
+        githubConfigUrl: https://github.com/jvizueta/liq-r2-demo
+        githubConfigSecret: gh-actions-app-credentials
+        runnerScaleSetName: liq-rs
+        minRunners: 1
+        maxRunners: 3
+        containerMode:
+          type: "dind"
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
