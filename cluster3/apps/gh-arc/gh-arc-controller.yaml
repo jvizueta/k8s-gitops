@@ -16,7 +16,7 @@ spec:
     helm:
       releaseName: gh-arc-controller
       values: |
-        # (defaults are fine; SA will be named: gh-arc-controller-gha-rs-controller)
+        installCRDs: false
   ignoreDifferences:
     - group: apiextensions.k8s.io
       kind: CustomResourceDefinition
