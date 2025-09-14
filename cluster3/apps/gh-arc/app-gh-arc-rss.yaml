@@ -9,7 +9,7 @@ spec:
   project: infra
   destination:
     server: https://kubernetes.default.svc
-    namespace: gh-actions-runners-infra
+    namespace: gh-arc-infra
   source:
     repoURL: ghcr.io/actions/actions-runner-controller-charts
     chart: gha-runner-scale-set
@@ -17,7 +17,7 @@ spec:
     helm:
       values: |
         githubConfigUrl: https://github.com/jvizueta/liq-r2-demo
-        githubConfigSecret: gh-actions-app-credentials
+        githubConfigSecret: gh-arc-app-credentials
         runnerScaleSetName: liq-rs
         minRunners: 1
         maxRunners: 3
