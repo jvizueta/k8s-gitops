@@ -17,6 +17,13 @@ spec:
       releaseName: gh-arc-controller
       values: |
         # (defaults are fine; SA will be named: gh-arc-controller-gha-rs-controller)
+  ignoreDifferences:
+    - group: apiextensions.k8s.io
+      kind: CustomResourceDefinition
+      jsonPointers:
+        - /metadata/annotations
+        - /spec/versions
+        - /spec/preserveUnknownFields
   syncPolicy:
     automated:
       prune: true
@@ -24,3 +31,4 @@ spec:
     syncOptions:
       - CreateNamespace=true
       - ServerSideApply=true
+      - RespectIgnoreDifferences=true
