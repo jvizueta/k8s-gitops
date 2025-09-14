@@ -19,7 +19,7 @@ spec:
       values: |
         githubConfigUrl: https://github.com/jvizueta/liq-r2-demo
         githubConfigSecret: gh-actions-app-credentials
-        runnerScaleSetName: liq-rs
+        runnerScaleSetName: rs3-1
         minRunners: 1
         maxRunners: 3
         containerMode:
