@@ -23,6 +23,9 @@ spec:
         maxRunners: 3
         containerMode:
           type: "dind"
+        controllerServiceAccount:
+          name: gh-arc-controller-gha-rs-controller
+          namespace: gh-arc-infra
   syncPolicy:
     automated:
       prune: true

@@ -1,0 +1,25 @@
+# k8s-clusters/cluster3/apps/gh-arc/gh-arc-controller.yaml
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: gh-arc-controller
+  namespace: argocd
+spec:
+  project: infra
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: gh-arc-infra
+  source:
+    repoURL: ghcr.io/actions/actions-runner-controller-charts
+    chart: gha-runner-scale-set-controller
+    targetRevision: "0.12.1"
+    helm:
+      releaseName: gh-arc-controller
+      values: |
+        # (defaults are fine; SA will be named: gh-arc-controller-gha-rs-controller)
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
