@@ -17,7 +17,7 @@ spec:
     helm:
       values: |
         githubConfigUrl: https://github.com/jvizueta/liq-r2-demo
-        githubConfigSecret: gh-arc-app-credentials
+        githubConfigSecret: gh-actions-app-credentials
         runnerScaleSetName: liq-rs
         minRunners: 1
         maxRunners: 3
