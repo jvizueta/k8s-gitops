@@ -22,7 +22,8 @@ spec:
         minRunners: 1
         maxRunners: 3
         containerMode:
-          type: "dind"
+          type: "kubernetes"
+        #  type: "dind"          
         controllerServiceAccount:
           name: gh-arc-controller-gha-rs-controller
           namespace: gh-arc-infra
