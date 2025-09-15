@@ -4,7 +4,7 @@ metadata:
   name: gh-arc-dind
   namespace: argocd
   annotations:
-    argocd.argoproj.io/sync-wave: "0"    # apply after secrets  
+    argocd.argoproj.io/sync-wave: "0"    # apply after secrets and controller
 spec:
   project: infra
   destination:
@@ -26,18 +26,6 @@ spec:
           - arc-dind
         containerMode:
           type: "dind"
-        # (Opcional) resources; DinD suele requerir más CPU/RAM
-        template:
-          spec:
-            containers:
-              - name: runner
-                resources:
-                  requests:
-                    cpu: "500m"
-                    memory: "1Gi"
-                  limits:
-                    cpu: "1000m"
-                    memory: "2Gi"
         controllerServiceAccount:
           name: gh-arc-controller-gha-rs-controller
           namespace: gh-arc-infra

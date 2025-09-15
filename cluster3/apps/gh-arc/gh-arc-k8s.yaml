@@ -4,7 +4,7 @@ metadata:
   name: gh-arc-k8s
   namespace: argocd
   annotations:
-    argocd.argoproj.io/sync-wave: "0"    # apply after secrets  
+    argocd.argoproj.io/sync-wave: "0"    # apply after secrets and controller
 spec:
   project: infra
   destination:
