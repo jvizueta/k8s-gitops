@@ -25,8 +25,8 @@ spec:
         runnerScaleSetLabels:
           - arc-dind
         containerMode:
-          type: "dind"
-        controllerServiceAccount:
+          type: "dind"       
+        controllerServiceAccount:  
           name: gh-arc-controller-gha-rs-controller
           namespace: gh-arc-infra
   syncPolicy:
