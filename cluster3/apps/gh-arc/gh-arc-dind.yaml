@@ -20,8 +20,8 @@ spec:
         githubConfigUrl: https://github.com/jvizueta/liq-r2-demo
         githubConfigSecret: gh-actions-app-credentials
         runnerScaleSetName: cluster3-arc-dind
-        minRunners: 1
-        maxRunners: 3
+        minRunners: 2
+        maxRunners: 4
         runnerScaleSetLabels:
           - arc-dind
         containerMode:
