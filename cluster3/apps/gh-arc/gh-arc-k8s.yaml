@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: gh-arc-rss
+  name: gh-arc-k8s
   namespace: argocd
   annotations:
     argocd.argoproj.io/sync-wave: "0"    # apply after secrets  
@@ -19,7 +19,7 @@ spec:
       values: |
         githubConfigUrl: https://github.com/jvizueta/liq-r2-demo
         githubConfigSecret: gh-actions-app-credentials
-        runnerScaleSetName: rs3-1
+        runnerScaleSetName: cluster3-arc-k8s
         minRunners: 1
         maxRunners: 3
         containerMode:

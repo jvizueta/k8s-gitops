@@ -1,0 +1,47 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: gh-arc-dind
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "0"    # apply after secrets  
+spec:
+  project: infra
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: gh-arc-infra
+  source:
+    # Helm chart for the runner scale set
+    repoURL: ghcr.io/actions/actions-runner-controller-charts
+    chart: gha-runner-scale-set
+    targetRevision: "0.12.1"
+    helm:
+      values: |
+        githubConfigUrl: https://github.com/jvizueta/liq-r2-demo
+        githubConfigSecret: gh-actions-app-credentials
+        runnerScaleSetName: cluster3-arc-dind
+        minRunners: 1
+        maxRunners: 3
+        runnerScaleSetLabels:
+          - arc-dind
+        containerMode:
+          type: "dind"
+        # (Opcional) resources; DinD suele requerir más CPU/RAM
+        template:
+          spec:
+            containers:
+              - name: runner
+                resources:
+                  requests:
+                    cpu: "500m"
+                    memory: "1Gi"
+                  limits:
+                    cpu: "1000m"
+                    memory: "2Gi"
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
