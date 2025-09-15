@@ -38,6 +38,9 @@ spec:
                   limits:
                     cpu: "1000m"
                     memory: "2Gi"
+        controllerServiceAccount:
+          name: gh-arc-controller-gha-rs-controller
+          namespace: gh-arc-infra
   syncPolicy:
     automated:
       prune: true
