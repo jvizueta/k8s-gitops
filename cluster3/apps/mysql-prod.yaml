@@ -1,0 +1,59 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: mysql-prod
+  namespace: argocd
+spec:
+  project: prod
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: mysql-prod
+  sources:
+    # 1) Overlay Kustomize: aplica o Secret primeiro (wave -1)
+    - repoURL: git@github.com:jvizueta/k8s-apps-private.git
+      targetRevision: main
+      path: mysql/overlays/prod
+      ref: values
+      kustomize: {}
+
+    # 2) Helm do Bitnami usando o values.yaml do overlay
+    - repoURL: https://charts.bitnami.com/bitnami
+      chart: mysql
+      targetRevision: 14.0.3
+      helm:
+        releaseName: mysql
+        valueFiles:
+          - $values/mysql/overlays/prod/values.yaml
+
+    # 3) Helm ingress-nginx with inline values
+    - repoURL: https://kubernetes.github.io/ingress-nginx
+      chart: ingress-nginx
+      targetRevision: 4.11.2
+      helm:
+        releaseName: mysql-ingress
+        values: |
+          controller:
+            ingressClass: mysql-nginx-ingress
+            ingressClassResource:
+              name: mysql-nginx-ingress
+              enabled: true
+              default: false
+            service:
+              type: LoadBalancer
+              extraPorts:
+                - name: mysql-3306
+                  port: 3306
+                  targetPort: 3306
+                  protocol: TCP
+            admissionWebhooks:
+              enabled: false  # simplifica dev
+
+          # Mapea el 3306 entrante → Service MySQL del mismo ns
+          tcp:
+            "3306": "mysql-prod/mysql:3306"
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
