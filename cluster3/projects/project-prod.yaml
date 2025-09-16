@@ -11,6 +11,9 @@ spec:
   sourceRepos:
     - git@github.com:jvizueta/k8s-apps*   # Only repos under your GitHub starting with k8s-app-
     - https://charts.bitnami.com/bitnami
+    - https://kubernetes.github.io/ingress-nginx
+    - https://actions-runner-controller.github.io/actions-runner-controller
+    - ghcr.io/actions/actions-runner-controller-charts
   destinations:
     - server: '*'         # Any cluster registered in Argo CD
       namespace: "*-prod" # Must end with -prod
