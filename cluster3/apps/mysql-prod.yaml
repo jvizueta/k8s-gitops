@@ -40,6 +40,8 @@ spec:
               default: false
             service:
               type: LoadBalancer
+              annotations:
+                external-dns.alpha.kubernetes.io/hostname: mysql-prod.lan
               extraPorts:
                 - name: mysql-3306
                   port: 3306
