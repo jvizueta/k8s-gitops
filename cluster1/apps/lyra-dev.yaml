@@ -1,0 +1,25 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: lyra-dev
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "20"
+  labels:
+    app.kubernetes.io/part-of: apps
+spec:
+  project: dev
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: lyra-dev
+  source:
+    repoURL: git@github.com:jvizueta/k8s-apps-public.git
+    targetRevision: main
+    path: apps/lyra/overlays/dev
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
