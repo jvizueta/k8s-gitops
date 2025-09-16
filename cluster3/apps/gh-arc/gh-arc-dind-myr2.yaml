@@ -17,9 +17,9 @@ spec:
     targetRevision: "0.12.1"
     helm:
       values: |
-        githubConfigUrl: https://github.com/jvizueta/r2-app
+        githubConfigUrl: https://github.com/jvizueta/myr2
         githubConfigSecret: gh-actions-app-credentials
-        runnerScaleSetName: cluster3-arc-dind-r2-app
+        runnerScaleSetName: cluster3-arc-dind-myr2
         minRunners: 2
         maxRunners: 4
         runnerScaleSetLabels:
