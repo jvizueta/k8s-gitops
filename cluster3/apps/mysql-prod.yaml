@@ -48,7 +48,7 @@ spec:
                   targetPort: 3306
                   protocol: TCP
             admissionWebhooks:
-              enabled: false  # simplifica dev
+              enabled: false 
 
           # Mapea el 3306 entrante → Service MySQL del mismo ns
           tcp:
