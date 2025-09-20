@@ -23,6 +23,27 @@ spec:
           persistence:
             defaultClass: false
             reclaimPolicy: Retain
+
+          defaultSettings:
+            defaultReplicaCount: 1
+            replicaAutoBalance: best-effort
+            upgradeChecker: false
+            supportBundleUpload: false
+            allowRecurringJobWhileVolumeDetached: true
+            createDefaultDiskLabeledNodes: true
+            defaultDataPath: /var/lib/longhorn
+            defaultLonghornStaticStorageClass: longhorn
+            defaultLonghornStorageClass: longhorn
+            defaultLonghornStorageClassAllowVolumeExpansion: true
+            defaultLonghornStorageClassReclaimPolicy: Retain
+            defaultLonghornStorageClassFsType: ext4
+            defaultLonghornStorageClassProvisioner: driver.longhorn.io
+            defaultLonghornStorageClassVolumeBindingMode: Immediate
+          
+          longhornManager:
+            environmentCheck:
+              enabled: false
+
   destination:
     server: https://kubernetes.default.svc
     namespace: longhorn-system
