@@ -4,46 +4,61 @@ metadata:
   name: longhorn-core
   namespace: argocd
 spec:
+  project: core
   syncPolicy:
     syncOptions:
       - CreateNamespace=true
-  project: core
-  sources:
-    - chart: longhorn
-      repoURL: https://charts.longhorn.io
-      targetRevision: v1.8.1 # Replace with the Longhorn version you'd like to install or upgrade to
-      helm:
-        values: |
-          # DEV overrides
-          # Desactiva el hook pre-upºgrade SOLO para instalación inicial con ArgoCD.
-          # Vuelve a activarlo antes de subir de versión.
-          preUpgradeChecker:
-            jobEnabled: false
-            
-          persistence:
-            defaultClass: false
-            reclaimPolicy: Retain
-
-          defaultSettings:
-            defaultReplicaCount: 1
-            replicaAutoBalance: best-effort
-            upgradeChecker: false
-            supportBundleUpload: false
-            allowRecurringJobWhileVolumeDetached: true
-            createDefaultDiskLabeledNodes: true
-            defaultDataPath: /var/lib/longhorn
-            defaultLonghornStaticStorageClass: longhorn
-            defaultLonghornStorageClass: longhorn
-            defaultLonghornStorageClassAllowVolumeExpansion: true
-            defaultLonghornStorageClassReclaimPolicy: Retain
-            defaultLonghornStorageClassFsType: ext4
-            defaultLonghornStorageClassProvisioner: driver.longhorn.io
-            defaultLonghornStorageClassVolumeBindingMode: Immediate
-          
-          longhornManager:
-            environmentCheck:
-              enabled: false
-
   destination:
     server: https://kubernetes.default.svc
     namespace: longhorn-system
+  source:
+    chart: longhorn
+    repoURL: https://charts.longhorn.io
+    targetRevision: v1.8.1
+    helm:
+      values: |
+        # Desactiva el hook pre-upgrade SOLO para instalación inicial con ArgoCD.
+        preUpgradeChecker:
+          jobEnabled: false
+
+        # Simula iscsiadm para evitar errores en Talos
+        longhornManager:
+          environmentCheck:
+            enabled: false
+          extraInitContainers:
+            - name: fake-iscsiadm
+              image: busybox
+              command: ["/bin/sh", "-c"]
+              args:
+                - "mkdir -p /host/usr/bin && echo -e '#!/bin/sh\\necho fake iscsiadm' > /host/usr/bin/iscsiadm && chmod +x /host/usr/bin/iscsiadm"
+              volumeMounts:
+                - name: host-bin
+                  mountPath: /host/usr/bin
+          extraVolumes:
+            - name: host-bin
+              hostPath:
+                path: /usr/bin
+                type: Directory
+          extraVolumeMounts:
+            - name: host-bin
+              mountPath: /host/usr/bin
+
+        persistence:
+          defaultClass: false
+          reclaimPolicy: Retain
+
+        defaultSettings:
+          defaultReplicaCount: 1
+          replicaAutoBalance: best-effort
+          upgradeChecker: false
+          supportBundleUpload: false
+          allowRecurringJobWhileVolumeDetached: true
+          createDefaultDiskLabeledNodes: true
+          defaultDataPath: /var/lib/longhorn
+          defaultLonghornStaticStorageClass: longhorn
+          defaultLonghornStorageClass: longhorn
+          defaultLonghornStorageClassAllowVolumeExpansion: true
+          defaultLonghornStorageClassReclaimPolicy: Retain
+          defaultLonghornStorageClassFsType: ext4
+          defaultLonghornStorageClassProvisioner: driver.longhorn.io
+          defaultLonghornStorageClassVolumeBindingMode: Immediate
