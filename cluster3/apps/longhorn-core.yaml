@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: longhorn-dev
+  name: longhorn-core
   namespace: argocd
   annotations:
     argocd.argoproj.io/sync-wave: "20"
@@ -12,7 +12,7 @@ spec:
     server: https://kubernetes.default.svc
     namespace: longhorn-system
   source:
-    repoURL: https://github.com/jvizueta/k8s-apps-private
+    repoURL: git@github.com:jvizueta/k8s-apps-private.git
     targetRevision: main
     path: longhorn
     helm:
