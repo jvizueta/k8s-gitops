@@ -3,29 +3,26 @@ kind: Application
 metadata:
   name: longhorn-core
   namespace: argocd
-  annotations:
-    argocd.argoproj.io/sync-wave: "20"
 spec:
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
   project: core
+  sources:
+    - chart: longhorn
+      repoURL: https://charts.longhorn.io/
+      targetRevision: v1.9.1 # Replace with the Longhorn version you'd like to install or upgrade to
+      helm:
+        values: |
+          # DEV overrides
+          # Desactiva el hook pre-upgrade SOLO para instalación inicial con ArgoCD.
+          # Vuelve a activarlo antes de subir de versión.
+          preUpgradeChecker:
+            jobEnabled: false
+            
+          persistence:
+            defaultClass: false
+            reclaimPolicy: Retain
   destination:
     server: https://kubernetes.default.svc
     namespace: longhorn-system
-  source:
-    repoURL: git@github.com:jvizueta/k8s-apps-private.git
-    targetRevision: main
-    path: longhorn
-    helm:
-      releaseName: longhorn
-      valueFiles:
-        - values.yaml        # base
-        - values-dev.yaml    # overrides dev (último gana)
-  syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
-    retry:
-      limit: 5
-      backoff:
-        duration: 10s
-        factor: 2
-        maxDuration: 3m
