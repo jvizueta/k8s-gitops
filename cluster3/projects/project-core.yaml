@@ -13,7 +13,7 @@ spec:
     - https://charts.bitnami.com/bitnami
     - https://kubernetes.github.io/ingress-nginx
     - https://charts.jetstack.io
-    - https://charts.longhorn.io
+    - https://charts.longhorn.io/
   destinations:
     - server: '*'        # Any cluster registered in Argo CD
       namespace: "*" # Can be any namespace

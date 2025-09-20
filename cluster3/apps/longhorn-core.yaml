@@ -10,7 +10,7 @@ spec:
   project: core
   sources:
     - chart: longhorn
-      repoURL: https://charts.longhorn.io
+      repoURL: https://charts.longhorn.io/
       targetRevision: v1.9.1 # Replace with the Longhorn version you'd like to install or upgrade to
       helm:
         values: |
