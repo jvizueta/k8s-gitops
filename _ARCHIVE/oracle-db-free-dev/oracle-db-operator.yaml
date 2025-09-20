@@ -1,0 +1,27 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: oracle-db-operator
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "10"
+spec:
+  project: dev
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: oracle-db-free-dev
+  source:
+    repoURL: https://oracle.github.io/helm-charts
+    chart: oracle-database-operator
+    targetRevision:  0.3.0 # <- use a versão estável mais recente disponível no repo
+    helm:
+      values: |
+        rbac:
+          create: true
+        # Ajuste tolerations/nodeSelector se fores agendar em control-plane
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - ApplyOutOfSyncOnly=true

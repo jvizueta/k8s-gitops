@@ -1,0 +1,32 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: longhorn-dev
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "20"
+    argocd.argoproj.io/sync-options: CreateNamespace=true
+spec:
+  project: core
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: longhorn-system
+  source:
+    repoURL: https://github.com/jvizueta/k8s-apps-private
+    targetRevision: main
+    path: longhorn
+    helm:
+      releaseName: longhorn
+      valueFiles:
+        - values.yaml        # base
+        - values-dev.yaml    # overrides dev (último gana)
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    retry:
+      limit: 5
+      backoff:
+        duration: 10s
+        factor: 2
+        maxDuration: 3m

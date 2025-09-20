@@ -1,0 +1,22 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: oracle-db-free-dev
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "20"
+spec:
+  project: dev
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: oracle-db-free-dev
+  source:
+    repoURL: git@github.com:jvizueta/k8s-apps-private
+    targetRevision: main
+    path: oracle-db-free/overlays/dev
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - ApplyOutOfSyncOnly=true
