@@ -10,12 +10,12 @@ spec:
   project: core
   sources:
     - chart: longhorn
-      repoURL: https://charts.longhorn.io/
+      repoURL: https://charts.longhorn.io
       targetRevision: v1.9.1 # Replace with the Longhorn version you'd like to install or upgrade to
       helm:
         values: |
           # DEV overrides
-          # Desactiva el hook pre-upgrade SOLO para instalación inicial con ArgoCD.
+          # Desactiva el hook pre-upºgrade SOLO para instalación inicial con ArgoCD.
           # Vuelve a activarlo antes de subir de versión.
           preUpgradeChecker:
             jobEnabled: false
