@@ -32,6 +32,18 @@ spec:
             memory: "128Mi"
 
         replicaCount: 1
+  
+        origincert: /etc/cloudflared/cert.pem
+
+        extraVolumes:
+          - name: cloudflared-cert
+            secret:
+              secretName: cloudflared-cert
+
+        extraVolumeMounts:
+          - name: cloudflared-cert
+            mountPath: /etc/cloudflared
+            readOnly: true
   destination:
     server: https://kubernetes.default.svc
     namespace: lyra-dev
