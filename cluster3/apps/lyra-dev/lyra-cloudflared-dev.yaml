@@ -9,8 +9,8 @@ spec:
   project: dev
   source:
     repoURL: https://cloudflare.github.io/helm-charts
-    chart: cloudflared
-    targetRevision: 0.7.7
+    chart: cloudflare-tunnel-remote
+    targetRevision: 0.1.2
     helm:
       values: |
         tunnelSecretName: cloudflared-tunnel-token
