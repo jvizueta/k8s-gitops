@@ -1,0 +1,43 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: lyra-cloudflare-dev
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "-10"
+spec:
+  project: dev
+  source:
+    repoURL: https://cloudflare.github.io/helm-charts
+    chart: cloudflare-tunnel
+    targetRevision: 0.3.2
+    helm:
+      values: |
+        cloudflare:
+          tunnelName: "lyra-dev"
+          tunnelId: "a60f2161-59fd-43aa-9697-3e18b0ff5f0e"
+          secretName: "cloudflared-tunnel-token"
+          ingress:
+            - hostname: "lyra-dev.devopian.com"
+              service: "http://lyra.lyra-dev.svc.cluster.local:80"
+              originRequest:
+                noTLSVerify: true
+
+        resources:
+          limits:
+            cpu: "100m"
+            memory: "128Mi"
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+
+        replicaCount: 1
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: lyra-dev
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
