@@ -1,0 +1,27 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: lyra-cloudflared
+  namespace: argocd
+spec:
+  project: dev
+  source:
+    repoURL: https://cloudflare.github.io/helm-charts
+    chart: cloudflared
+    targetRevision: 0.7.7
+    helm:
+      values: |
+        tunnelSecretName: cloudflared-tunnel-token
+        ingress:
+          - hostname: lyra-dev.devopian.com
+            service: http://lyra.lyra-dev.svc.cluster.local:80
+          - service: http_status:404
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: lyra-dev
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
