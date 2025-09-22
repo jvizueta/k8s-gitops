@@ -23,6 +23,15 @@ spec:
               originRequest:
                 noTLSVerify: true
 
+        # Configuración del archivo config.yaml de cloudflared
+        config:
+          origincert: /etc/cloudflared/cert/cert.pem
+
+        # Variable de entorno como respaldo
+        env:
+          - name: TUNNEL_ORIGIN_CERT
+            value: /etc/cloudflared/cert/cert.pem
+
         resources:
           limits:
             cpu: "100m"
@@ -33,16 +42,18 @@ spec:
 
         replicaCount: 1
   
-        origincert: /etc/cloudflared/cert.pem
-
+        # Volúmenes para montar el certificado
         extraVolumes:
           - name: cloudflared-cert
             secret:
               secretName: cloudflared-cert
+              items:
+                - key: cert.pem
+                  path: cert.pem
 
         extraVolumeMounts:
           - name: cloudflared-cert
-            mountPath: /etc/cloudflared
+            mountPath: /etc/cloudflared/cert
             readOnly: true
   destination:
     server: https://kubernetes.default.svc
