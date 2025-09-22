@@ -15,6 +15,7 @@ spec:
     - https://actions-runner-controller.github.io/actions-runner-controller
     - ghcr.io/actions/actions-runner-controller-charts
     - https://charts.longhorn.io
+    - https://community-charts.github.io/helm-charts
   destinations:
     - server: '*'        # Any cluster registered in Argo CD
       namespace: "*-infra" # Must end with -infra

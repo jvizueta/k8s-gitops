@@ -1,0 +1,32 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: cloudflared-chart
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+spec:
+  project: infra
+  source:
+    repoURL: https://community-charts.github.io/helm-charts
+    chart: cloudflared
+    targetRevision: 2.2.0
+    helm:
+      values: |
+        tunnel:
+          name: cloudflared
+          credentials:
+            existingSecret: cloudflared-credentials
+        ingress:
+          - hostname: lyra-dev.devopian.com
+            service: http://lyra.lyra-dev.svc.cluster.local:80
+          - service: http_status:404
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: cloudflared-infra
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

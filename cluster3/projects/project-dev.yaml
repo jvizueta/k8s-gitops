@@ -12,7 +12,7 @@ spec:
     - git@github.com:jvizueta/k8s-apps*   # Only repos under your GitHub starting with k8s-app-
     - https://charts.bitnami.com/bitnami
     - https://kubernetes.github.io/ingress-nginx
-    - https://cloudflare.github.io/helm-charts
+    - https://community-charts.github.io/helm-charts
   destinations:
     - server: '*'        # Any cluster registered in Argo CD
       namespace: "*-dev" # Must end with -dev
