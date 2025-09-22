@@ -14,6 +14,7 @@ spec:
     helm:
       values: |
         cloudflare:
+          account: "a2713628cf62e86b0d86e4871665c712"
           tunnelName: "lyra-dev"
           tunnelId: "a60f2161-59fd-43aa-9697-3e18b0ff5f0e"
           secretName: "cloudflared-tunnel-token"
