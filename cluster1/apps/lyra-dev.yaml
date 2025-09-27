@@ -13,9 +13,9 @@ spec:
     server: https://kubernetes.default.svc
     namespace: lyra-dev
   source:
-    repoURL: git@github.com:jvizueta/k8s-apps-public.git
+    repoURL: git@github.com:jvizueta/lyra.git
     targetRevision: main
-    path: apps/lyra/overlays/dev
+    path: k8s/lyra/overlays/dev
   syncPolicy:
     automated:
       prune: true
