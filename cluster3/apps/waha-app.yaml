@@ -1,0 +1,24 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: waha
+  namespace: argocd
+  labels:
+    app.kubernetes.io/name: waha
+spec:
+  project: infra
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: waha-infra
+  source:
+    repoURL: https://github.com/jvizueta/k8s-apps-public
+    targetRevision: main
+    path: waha
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
+      - RespectIgnoreDifferences=true
