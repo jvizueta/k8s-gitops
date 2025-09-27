@@ -10,6 +10,7 @@ spec:
   description: Apps allowed to deploy into namespaces with -dev suffix
   sourceRepos:
     - git@github.com:jvizueta/k8s-apps*   # Only repos under your GitHub starting with k8s-app-
+    - git@github.com:jvizueta/lyra.git
   destinations:
     - server: '*'        # Any cluster registered in Argo CD
       namespace: "*-dev" # Must end with -dev
