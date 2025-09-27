@@ -11,7 +11,7 @@ spec:
     server: https://kubernetes.default.svc
     namespace: waha-infra
   source:
-    repoURL: https://github.com/jvizueta/k8s-apps-public
+    repoURL: git@github.com:jvizueta/k8s-apps-public.git
     targetRevision: main
     path: waha
   syncPolicy:
