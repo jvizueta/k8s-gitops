@@ -9,8 +9,7 @@ metadata:
 spec:
   description: Apps allowed to deploy into namespaces with -prod suffix
   sourceRepos:
-    - git@github.com:jvizueta/k8s-apps*   # Only repos under your GitHub starting with k8s-app-
-    - git@github.com:jvizueta/lyra.git
+    - git@github.com:jvizueta/*
   destinations:
     - server: '*'         # Any cluster registered in Argo CD
       namespace: "*-prod" # Must end with -prod
