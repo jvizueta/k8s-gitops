@@ -1,19 +1,19 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: lyra-dev
+  name: counter-agent
   namespace: argocd
   annotations:
     argocd.argoproj.io/sync-wave: "-20"
 spec:
   project: dev
   source:
-    repoURL: git@github.com:jvizueta/lyra.git
+    repoURL: git@github.com:jvizueta/k8s-apps-public.git
     targetRevision: main
-    path: k8s/lyra/overlays/dev
+    path: ai-customer-service/counter-agent/overlays/dev
   destination:
     server: https://kubernetes.default.svc
-    namespace: lyra-dev
+    namespace: ai-customer-service-dev
   syncPolicy:
     automated:
       prune: true

@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: lyra-cloudflare-dev
+  name: counter-agent-cloudflare-dev
   namespace: argocd
   annotations:
     argocd.argoproj.io/sync-wave: "-10"
@@ -15,12 +15,12 @@ spec:
       values: |
         cloudflare:
           account: "a2713628cf62e86b0d86e4871665c712"
-          tunnelName: "lyra-dev"
+          tunnelName: "counter-agent-dev"
           tunnelId: "a60f2161-59fd-43aa-9697-3e18b0ff5f0e"
           secretName: "cloudflared-tunnel-token"
           ingress:
-            - hostname: "lyra-dev.devopian.com"
-              service: "http://lyra.lyra-dev.svc.cluster.local:80"
+            - hostname: "counter-agent-dev.devopian.com"
+              service: "http://counter-agent.counter-agent-dev.svc.cluster.local:80"
               originRequest:
                 noTLSVerify: true
 
@@ -58,7 +58,7 @@ spec:
             readOnly: true
   destination:
     server: https://kubernetes.default.svc
-    namespace: lyra-dev
+    namespace: counter-agent-dev
   syncPolicy:
     automated:
       prune: true
