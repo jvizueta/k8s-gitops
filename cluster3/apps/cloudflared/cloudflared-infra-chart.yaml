@@ -22,7 +22,7 @@ spec:
             gracePeriod: "30s"
         tunnelSecrets:
           existingPemFileSecret:
-            name: "cloudflared-cert"º
+            name: "cloudflared-cert"
             key: "cert.pem"
           existingConfigJsonFileSecret:
             name: "cloudflared-credentials"
