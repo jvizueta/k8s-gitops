@@ -1,18 +1,52 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: redis
+  name: redis-groundhog2k
   namespace: argocd
 spec:
-  project: dev
+  project: default
   source:
-    repoURL: https://charts.bitnami.com/bitnami
+    repoURL: https://groundhog2k.github.io/helm-charts/
     chart: redis
-    targetRevision: 19.5.2   # Use the latest stable version
+    targetRevision: 2.1.4   # Set a specific version or a semver range
     helm:
       values: |
-        auth:
-          enabled: false     # For development; set to true for production
+        # --- Basic configuration ---
+        replica:
+          enabled: false          # Single instance (true = enable replication)
+        service:
+          type: ClusterIP         # Use ClusterIP unless you need external access
+          port: 6379
+        persistence:
+          enabled: true           # Enable persistence for data durability
+          accessModes: ["ReadWriteOnce"]
+          size: 8Gi
+          storageClass: "local-path"        # Set your storage class (e.g. "longhorn", "local-path", etc.)
+
+        # --- Resource requests/limits ---
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
+
+        # --- Health checks ---
+        livenessProbe:
+          enabled: true
+        readinessProbe:
+          enabled: true
+
+        # Note: By default, the chart deploys Redis without authentication.
+        # To enable password protection, configure:
+        # auth:
+        #   enabled: true
+        #   password: <your-password-here>
+        # Or reference an existing secret:
+        #   existingSecret: redis-auth
+        #   existingSecretKey: redis-password
+
   destination:
     server: https://kubernetes.default.svc
     namespace: ai-customer-service-dev
@@ -20,3 +54,6 @@ spec:
     automated:
       prune: true
       selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ApplyOutOfSyncOnly=true
