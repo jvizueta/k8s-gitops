@@ -1,0 +1,49 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: redis-insight
+  namespace: argocd
+spec:
+  project: infra
+  
+  source:
+    repoURL: https://charts.redis.io
+    chart: redis-insight
+    targetRevision: 0.1.0
+    helm:
+      values: |
+        service:
+          type: ClusterIP
+          port: 80
+        
+        ingress:
+          enabled: true
+          className: "nginx"
+          hosts:
+            - host: redis-insight.talos3.lan
+              paths:
+                - path: /
+                  pathType: Prefix
+        
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        
+        env:
+          - name: RITRUSTEDORIGINS
+            value: "redis-insight.talos3.lan"
+  
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: redis-insight-infra
+  
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
