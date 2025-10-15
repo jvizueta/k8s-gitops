@@ -3,8 +3,6 @@ kind: Application
 metadata:
   name: redis-stack
   namespace: argocd
-  labels:
-    app.kubernetes.io/part-of: infra
 spec:
   project: dev
   destination:
