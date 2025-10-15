@@ -1,0 +1,61 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: redis-stack
+  namespace: argocd
+  labels:
+    app.kubernetes.io/part-of: infra
+spec:
+  project: dev
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: redis-stack-dev
+
+  # Single source: Helm chart (no secrets, no TLS)
+  source:
+    repoURL: https://redis-stack.github.io/helm-redis-stack/
+    chart: redis-stack
+    targetRevision: "*"   # pin a version if desired
+    helm:
+      releaseName: redis-stack
+      values: |
+        # Image includes Redis + RediSearch + RedisJSON + RedisInsight (port 8001)
+        redis_stack:
+          repository: redis/redis-stack
+          tag: "7.4.0-v0"
+
+        # Cluster-internal services (no TLS, no external exposure)
+        service:
+          type: ClusterIP
+          ports:
+            redis: 6379
+            insight: 8001
+
+        # Persistence (PVC)
+        persistence:
+          enabled: true
+          accessModes: ["ReadWriteOnce"]
+          size: 10Gi
+          # storageClass: longhorn  # uncomment if needed
+
+        # Resources — lightweight defaults
+        resources:
+          requests:
+            cpu: "200m"
+            memory: "1Gi"
+          limits:
+            cpu: "2"
+            memory: "2.5Gi"
+
+        # Disable AOF to reduce I/O and avoid auth requirement
+        env:
+          - name: REDIS_ARGS
+            value: "--appendonly no"
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ApplyOutOfSyncOnly=true
