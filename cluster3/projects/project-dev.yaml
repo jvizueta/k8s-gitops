@@ -13,7 +13,7 @@ spec:
     - https://charts.bitnami.com/bitnami
     - https://kubernetes.github.io/ingress-nginx
     - https://community-charts.github.io/helm-charts
-    - https://redis-stack.github.io/helm-redis-stack
+    - https://redis-stack.github.io/helm-redis-stack/
   destinations:
     - server: '*'        # Any cluster registered in Argo CD
       namespace: "*-dev" # Must end with -dev
