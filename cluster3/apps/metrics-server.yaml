@@ -1,0 +1,86 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: metrics-server
+  namespace: argocd
+  labels:
+    app.kubernetes.io/part-of: platform-observability
+  annotations:
+    # Optional: run earlier than other apps if you use sync-waves
+    argocd.argoproj.io/sync-wave: "0"
+spec:
+  project: default
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: kube-system
+  source:
+    repoURL: https://kubernetes-sigs.github.io/metrics-server/
+    chart: metrics-server
+    # Use a semver range so Argo CD tracks latest 3.x automatically
+    targetRevision: 3.*
+    helm:
+      valuesObject:
+        # --- Common, production-friendly tweaks ---
+        replicas: 2
+        revisionHistoryLimit: 3
+
+        # Args that help in K3s/bare-metal where kubelet certs/addresses bite
+        args:
+          - --kubelet-preferred-address-types=InternalIP,Hostname,ExternalIP
+          - --kubelet-insecure-tls
+
+        # Create the aggregated APIService (usually you want this true)
+        apiService:
+          create: true
+
+        # Reasonable pod resources (adjust to your nodes)
+        resources:
+          requests:
+            cpu: 50m
+            memory: 64Mi
+          limits:
+            cpu: 200m
+            memory: 256Mi
+
+        # Run on control-plane too if needed (handy on small clusters)
+        tolerations:
+          - key: node-role.kubernetes.io/control-plane
+            operator: Exists
+            effect: NoSchedule
+          - key: node-role.kubernetes.io/master
+            operator: Exists
+            effect: NoSchedule
+
+        # If your CNI/firewall is picky, hostNetwork may help. Usually not needed.
+        hostNetwork: false
+
+        # ServiceMonitor for Prometheus Operator (safe to enable; ignore if you don’t use it)
+        serviceMonitor:
+          enabled: true
+          interval: 30s
+          scrapeTimeout: 10s
+          # Set to your Prometheus release namespace if you use namespaceSelector=false there
+          namespace: kube-system
+
+        # Extra security hardening
+        podSecurityContext:
+          runAsNonRoot: true
+          seccompProfile:
+            type: RuntimeDefault
+        containerSecurityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop: ["ALL"]
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      # Create destination ns if missing (kube-system should exist, but harmless)
+      - CreateNamespace=true
+      # Server-side apply tends to avoid patch fights
+      - ServerSideApply=true
+      # Keep empty namespaces from being deleted on prune
+      - PruneLast=true

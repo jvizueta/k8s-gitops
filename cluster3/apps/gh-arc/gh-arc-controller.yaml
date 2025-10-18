@@ -1,4 +1,4 @@
-# k8s-clusters/cluster3/apps/gh-arc/gh-arc-controller.yaml
+# k8s-gitops/cluster3/apps/gh-arc/gh-arc-controller.yaml
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
