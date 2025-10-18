@@ -52,7 +52,8 @@ spec:
             effect: NoSchedule
 
         # If your CNI/firewall is picky, hostNetwork may help. Usually not needed.
-        hostNetwork: false
+        # hostNetwork:
+        #   enabled: false
 
         # ServiceMonitor for Prometheus Operator (safe to enable; ignore if you don’t use it)
         serviceMonitor:
