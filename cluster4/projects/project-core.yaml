@@ -1,0 +1,27 @@
+# Argo CD Project for "core" environments
+# Allows deploying apps from your repos into any cluster,
+# but only to namespaces that end with any suffix.
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: core
+  namespace: argocd
+spec:
+  description: Apps allowed to deploy into namespaces with any suffix
+  sourceRepos:
+    - git@github.com:jvizueta/*   # Only repos under your GitHub starting with k8s-app-
+    - https://charts.bitnami.com/bitnami
+    - https://kubernetes.github.io/ingress-nginx
+    - https://charts.jetstack.io
+    - https://charts.longhorn.io
+  destinations:
+    - server: '*'        # Any cluster registered in Argo CD
+      namespace: "*" # Can be any namespace
+  orphanedResources:
+    warn: true           # Warn if resources are unmanaged
+  clusterResourceWhitelist:
+    - group: "*"         # Allow all cluster-scoped resources (tighten later if needed)
+      kind: "*"
+  namespaceResourceBlacklist:
+    - group: ""          # Prevent infra apps from creating ResourceQuotas
+      kind: ResourceQuota
